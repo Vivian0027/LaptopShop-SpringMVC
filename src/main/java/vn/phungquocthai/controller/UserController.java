@@ -1,12 +1,12 @@
 package vn.phungquocthai.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import vn.phungquocthai.service.UserService;
 
-import org.springframework.web.bind.annotation.GetMapping;
-
-@RestController
+@Controller
 public class UserController {
 
     private UserService userService;
@@ -15,9 +15,21 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/")
-    public String getHomePage() {
-
-        return this.userService.handleHello();
+    @RequestMapping("/home")
+    public String getHome() {
+        return "home.html";
+    }
+    
+    @RequestMapping(path = {"/", "/hello"})
+    public String sayHello(ModelMap modelmap) {
+    	String data = userService.handleHello();
+    	modelmap.addAttribute("data", data);
+    	modelmap.addAttribute("html", "<h1 style=\"color: lime;\">Hack HTML</h1>\r\n");
+    	return "hello";
+    }
+    
+    @RequestMapping("admin/user")
+    public String getAdmin() {
+    	return "admin";
     }
 }
